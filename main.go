@@ -28,6 +28,10 @@ func check(err error) {
 func main() {
 	if rootCheck() {
 		flag.Parse()
+		if !*ramFlag && !*swapFlag && !*tempFlag {
+			color.Red("Не указаны флаги")
+			os.Exit(67)
+		}
 		doClean()
 	} else {
 		color.Red("Недостаточно привилегий. Запустите утилиту от имени суперпользователя.")
