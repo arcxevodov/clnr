@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,6 +10,12 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+)
+
+var (
+	ramFlag  = flag.Bool("r", false, "Clean RAM Cache")
+	swapFlag = flag.Bool("s", false, "Reload Swap")
+	tempFlag = flag.Bool("t", false, "Clean temp directory")
 )
 
 func check(err error) {
@@ -20,13 +27,11 @@ func check(err error) {
 
 func main() {
 	if rootCheck() {
-		displayStatus("Очистка началась")
-		cleanRamCache()
-		restartSwap()
-		cleanTemp()
-		displayStatus("Очистка завершена")
+		flag.Parse()
+		doClean()
 	} else {
 		color.Red("Недостаточно привилегий. Запустите утилиту от имени суперпользователя.")
+		os.Exit(67)
 	}
 }
 
@@ -34,6 +39,20 @@ func rootCheck() bool {
 	currentUser, err := user.Current()
 	check(err)
 	return currentUser.Username == "root"
+}
+
+func doClean() {
+	displayStatus("Очистка началась")
+	if *ramFlag {
+		cleanRamCache()
+	}
+	if *swapFlag {
+		restartSwap()
+	}
+	if *tempFlag {
+		cleanTemp()
+	}
+	displayStatus("Очистка завершена")
 }
 
 func displayStatus(info string) {
