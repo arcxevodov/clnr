@@ -1,0 +1,11 @@
+{
+    "flagRam": "Clean RAM cache",
+    "flagSwap": "Reload Swap",
+    "flagTemp": "Clean temporary files",
+    "flagError": "No flags specified",
+    "error": "Error",
+    "noRoot": "Not enough privileges. Run the utility as superuser",
+    "clearStart": "Clean started",
+    "clearEnd": "Cleaning completed",
+    "success": "Successful!"
+}
