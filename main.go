@@ -26,6 +26,21 @@ var (
 	localeArg = flag.String("lang", "en", "Set locale")
 )
 
+func main() {
+	if rootCheck() {
+		flag.Parse()
+		if !*ramFlag && !*swapFlag && !*tempFlag {
+			color.Red(localString("flagError"))
+			os.Exit(67)
+		}
+		fmt.Printf(getRam())
+		doClean()
+	} else {
+		color.Red(localString("noRoot"))
+		os.Exit(67)
+	}
+}
+
 func getRam() (string, string) {
 	bTotal := C.sysconf(C._SC_PHYS_PAGES) * C.sysconf(C._SC_PAGE_SIZE)
 	gbTotal := float64(bTotal) / 1024 / 1024 / 1024
@@ -72,21 +87,6 @@ func localString(id string) string {
 func check(err error) {
 	if err != nil {
 		color.Red("%s: %s", localString("error"), err)
-		os.Exit(67)
-	}
-}
-
-func main() {
-	if rootCheck() {
-		flag.Parse()
-		if !*ramFlag && !*swapFlag && !*tempFlag {
-			color.Red(localString("flagError"))
-			os.Exit(67)
-		}
-		fmt.Printf(getRam())
-		doClean()
-	} else {
-		color.Red(localString("noRoot"))
 		os.Exit(67)
 	}
 }
