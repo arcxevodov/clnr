@@ -19,10 +19,14 @@ import (
 )
 
 var (
+	// Флаги для выполнения различных функций программы
+	// Flags for performing various program functions
 	ramFlag  = flag.Bool("r", false, localString("flagRam"))
 	swapFlag = flag.Bool("s", false, localString("flagSwap"))
 	tempFlag = flag.Bool("t", false, localString("flagTemp"))
 
+	// Аргумент для указания языка программы
+	// Argument for specifying the language of the program
 	localeArg = flag.String("lang", "en", "Set locale")
 )
 
@@ -41,6 +45,8 @@ func main() {
 	}
 }
 
+// Получение полной и доступной оперативной памяти используя sysconf
+// Getting total and available RAM using sysconf
 func getRam() (string, string) {
 	bTotal := C.sysconf(C._SC_PHYS_PAGES) * C.sysconf(C._SC_PAGE_SIZE)
 	gbTotal := float64(bTotal) / 1024 / 1024 / 1024
@@ -53,6 +59,8 @@ func getRam() (string, string) {
 	return fmtTotal, fmtFree
 }
 
+// Инициализация локализатора
+// Localizer initialization
 func initLocalizer() *i18n.Localizer {
 	var bundle *i18n.Bundle
 	var localizer *i18n.Localizer
@@ -74,6 +82,8 @@ func initLocalizer() *i18n.Localizer {
 	return localizer
 }
 
+// Функция, возвращающая строку в нужном языке по его ID
+// A function that returns a string in the desired language by its ID
 func localString(id string) string {
 	localizer := initLocalizer()
 	localzeConfig := i18n.LocalizeConfig{
@@ -84,6 +94,8 @@ func localString(id string) string {
 	return result
 }
 
+// Автоматизация обработки типичных ошибок
+// Automation of handling common errors
 func check(err error) {
 	if err != nil {
 		color.Red("%s: %s", localString("error"), err)
@@ -91,12 +103,16 @@ func check(err error) {
 	}
 }
 
+// Проверка пользователя на наличие прав суперпользователя
+// Checking if a user has superuser rights
 func rootCheck() bool {
 	currentUser, err := user.Current()
 	check(err)
 	return currentUser.Username == "root"
 }
 
+// Начать очистку
+// Start cleaning
 func doClean() {
 	displayStatus(localString("clearStart"))
 	if *ramFlag {
@@ -111,12 +127,16 @@ func doClean() {
 	displayStatus(localString("clearEnd"))
 }
 
+// Вывод статуса и даты
+// Display status and date
 func displayStatus(info string) {
 	now := time.Now().Local()
 	nowFormatted := fmt.Sprintf("%02d:%02d:%02d", now.Hour(), now.Minute(), now.Second())
 	color.Green("=============== %s: %s ===============", info, nowFormatted)
 }
 
+// Функция перезагрузки Swap файла путем вызова Linux команд
+// Function to reload the Swap file by calling Linux commands
 func restartSwap() {
 	fmt.Print(localString("flagSwap"), "... ")
 	cmd := "swapoff -a && swapon -a"
@@ -125,6 +145,8 @@ func restartSwap() {
 	fmt.Println(localString("success"))
 }
 
+// Очистка оперативной памяти путем записи в файл drop_caches
+// Clear RAM by writing to the drop_caches file
 func cleanRamCache() {
 	fmt.Print(localString("flagRam"), "... ")
 	err := os.WriteFile("/proc/sys/vm/drop_caches", []byte("3"), 0)
@@ -132,6 +154,8 @@ func cleanRamCache() {
 	fmt.Println(localString("success"))
 }
 
+// Очистка папки /tmp путем перебора и рекурсивного удаления всех файлов
+// Clean up the /tmp folder by looping through and recursively deleting all files
 func cleanTemp() {
 	fmt.Print(localString("flagTemp"), "... ")
 	dir, err := os.Open("/tmp")
