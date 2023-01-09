@@ -24,6 +24,7 @@ var (
 	ramFlag  = flag.Bool("r", false, localString("flagRam"))
 	swapFlag = flag.Bool("s", false, localString("flagSwap"))
 	tempFlag = flag.Bool("t", false, localString("flagTemp"))
+	infoFlag = flag.Bool("i", false, localString("flagInfo"))
 
 	// Аргумент для указания языка программы
 	// Argument for specifying the language of the program
@@ -33,12 +34,23 @@ var (
 func main() {
 	if rootCheck() {
 		flag.Parse()
-		if !*ramFlag && !*swapFlag && !*tempFlag {
+
+		noFlags := !*ramFlag && !*swapFlag && !*tempFlag
+
+		switch {
+		case !*infoFlag && noFlags:
 			color.Red(localString("flagError"))
 			os.Exit(67)
+		case *infoFlag:
+			total, free := getRam()
+			fmt.Printf("%s | %s\n", total, free)
+			if noFlags {
+				os.Exit(0)
+			}
+			fallthrough
+		default:
+			doClean()
 		}
-		fmt.Printf(getRam())
-		doClean()
 	} else {
 		color.Red(localString("noRoot"))
 		os.Exit(67)

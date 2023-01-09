@@ -3,6 +3,7 @@
     "flagSwap": "Reload Swap",
     "flagTemp": "Clean temporary files",
     "flagError": "No flags specified",
+    "flagInfo": "Info about RAM",
     "totalRam": "Total: ",
     "freeRam": "Free: ",
     "error": "Error",
