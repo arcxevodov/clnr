@@ -1,5 +1,8 @@
 package main
 
+// #include <unistd.h>
+import "C"
+
 import (
 	"encoding/json"
 	"flag"
@@ -22,6 +25,18 @@ var (
 
 	localeArg = flag.String("lang", "en", "Set locale")
 )
+
+func getRam() (string, string) {
+	bTotal := C.sysconf(C._SC_PHYS_PAGES) * C.sysconf(C._SC_PAGE_SIZE)
+	gbTotal := float64(bTotal) / 1024 / 1024 / 1024
+	fmtTotal := fmt.Sprintf(localString("totalRam")+"%.1f GB", gbTotal)
+
+	bFree := C.sysconf(C._SC_AVPHYS_PAGES) * C.sysconf(C._SC_PAGE_SIZE)
+	gbFree := float64(bFree) / 1024 / 1024 / 1024
+	fmtFree := fmt.Sprintf(localString("freeRam")+"%.1f GB", gbFree)
+
+	return fmtTotal, fmtFree
+}
 
 func initLocalizer() *i18n.Localizer {
 	var bundle *i18n.Bundle
@@ -68,6 +83,7 @@ func main() {
 			color.Red(localString("flagError"))
 			os.Exit(67)
 		}
+		fmt.Printf(getRam())
 		doClean()
 	} else {
 		color.Red(localString("noRoot"))
