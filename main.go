@@ -32,9 +32,8 @@ var (
 )
 
 func main() {
+	flag.Parse()
 	if rootCheck() {
-		flag.Parse()
-
 		noFlags := !*ramFlag && !*swapFlag && !*tempFlag
 
 		switch {
@@ -76,19 +75,19 @@ func getRam() (string, string) {
 func initLocalizer() *i18n.Localizer {
 	var bundle *i18n.Bundle
 	var localizer *i18n.Localizer
+
+	path, err := os.Executable()
+	check(err)
+
 	if *localeArg == "ru" {
 		bundle = i18n.NewBundle(language.Russian)
-	} else {
-		bundle = i18n.NewBundle(language.English)
-	}
-
-	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
-	bundle.LoadMessageFile("locales/en.json")
-	bundle.LoadMessageFile("locales/ru.json")
-
-	if *localeArg == "ru" {
+		bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
+		bundle.LoadMessageFile(path[:len(path)-5] + "/locales/ru.json")
 		localizer = i18n.NewLocalizer(bundle, language.Russian.String())
 	} else {
+		bundle = i18n.NewBundle(language.English)
+		bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
+		bundle.LoadMessageFile(path[:len(path)-5] + "/locales/en.json")
 		localizer = i18n.NewLocalizer(bundle, language.English.String())
 	}
 	return localizer

@@ -19,8 +19,8 @@ install:
 	mkdir /usr/local/clnr
 	cp -r locales /usr/local/clnr
 	cp clnr /usr/local/clnr
-	ln /usr/local/clnr/clnr /usr/local/sbin/clnr
-	ln /usr/local/clnr/clnr /usr/local/bin/clnr
+	ln -sf /usr/local/clnr/clnr /usr/local/sbin/clnr
+	ln -sf /usr/local/clnr/clnr /usr/local/bin/clnr
 .PHONY:install
 
 uninstall:
