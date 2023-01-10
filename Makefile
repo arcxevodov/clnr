@@ -1,4 +1,5 @@
 .DEFAULT_GOAL := build
+SHELL := /bin/bash
 
 fmt:
 	go fmt ./...
@@ -15,9 +16,13 @@ build: vet
 .PHONY:build
 
 install:
-	cp clnr /usr/bin
+	mkdir /usr/local/clnr
+	cp -r locales /usr/local/clnr
+	cp clnr /usr/local/clnr
+	ln -sf /usr/local/clnr/clnr /usr/bin/clnr
 .PHONY:install
 
 uninstall:
+	rm -r /usr/local/clnr
 	rm /usr/bin/clnr
 .PHONY:uninstall
