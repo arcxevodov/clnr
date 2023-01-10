@@ -31,6 +31,12 @@ var (
 	localeArg = flag.String("lang", "en", "Set locale")
 )
 
+const (
+	NoRootError  = 1
+	NoFlagsError = 2
+	UnknownError = 3
+)
+
 func main() {
 	flag.Parse()
 	if rootCheck() {
@@ -39,7 +45,7 @@ func main() {
 		switch {
 		case !*infoFlag && noFlags:
 			color.Red(localString("flagError"))
-			os.Exit(67)
+			os.Exit(NoFlagsError)
 		case *infoFlag:
 			total, free := getRam()
 			fmt.Printf("%s | %s\n", total, free)
@@ -52,7 +58,7 @@ func main() {
 		}
 	} else {
 		color.Red(localString("noRoot"))
-		os.Exit(67)
+		os.Exit(NoRootError)
 	}
 }
 
@@ -110,7 +116,7 @@ func localString(id string) string {
 func check(err error) {
 	if err != nil {
 		color.Red("%s: %s", localString("error"), err)
-		os.Exit(67)
+		os.Exit(UnknownError)
 	}
 }
 
