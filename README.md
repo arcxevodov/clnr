@@ -24,8 +24,10 @@ sudo make install
 ```bash
 -r:  Очистка кэша оперативной памяти
 -s:  Перезагрузка Swap
--t:  Очистка временных файлов    
+-t:  Очистка временных файлов
+-lang [ru, en]: Локализация
 ```
+
 ---
 
 ## Linux Cleanup Tool <img src="https://media.tenor.com/fP_RQeMnWecAAAAj/penguin-wiping-floor.gif" width="20">
@@ -52,5 +54,6 @@ sudo make install
 ```bash
 -r:  Clean RAM cache
 -s:  Reload Swap
--t:  Clean temporary files  
+-t:  Clean temporary files
+-lang [ru, en]: Локализация
 ```
