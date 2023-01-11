@@ -166,7 +166,9 @@ func restartSwap() {
 // Clear RAM by writing to the drop_caches file
 func cleanRamCache() {
 	fmt.Print(localString("flagRam"), "... ")
-	err := os.WriteFile("/proc/sys/vm/drop_caches", []byte("3"), 0)
+	err := exec.Command("sync").Run()
+	check(err)
+	err = os.WriteFile("/proc/sys/vm/drop_caches", []byte("3"), 0)
 	check(err)
 	fmt.Println(localString("success"))
 }
