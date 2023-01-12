@@ -90,12 +90,14 @@ func initLocalizer() *i18n.Localizer {
 	if *localeArg == "ru" {
 		bundle = i18n.NewBundle(language.Russian)
 		bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
-		bundle.LoadMessageFile(path[:len(path)-5] + "/locales/ru.json")
+		_, err := bundle.LoadMessageFile(path[:len(path)-5] + "/locales/ru.json")
+		check(err)
 		localizer = i18n.NewLocalizer(bundle, language.Russian.String())
 	} else {
 		bundle = i18n.NewBundle(language.English)
 		bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
-		bundle.LoadMessageFile(path[:len(path)-5] + "/locales/en.json")
+		_, err := bundle.LoadMessageFile(path[:len(path)-5] + "/locales/en.json")
+		check(err)
 		localizer = i18n.NewLocalizer(bundle, language.English.String())
 	}
 	return localizer
@@ -181,7 +183,10 @@ func cleanTemp() {
 	fmt.Print(localString("flagTemp"), "... ")
 	dir, err := os.Open("/tmp")
 	check(err)
-	defer dir.Close()
+	defer func(dir *os.File) {
+		err := dir.Close()
+		check(err)
+	}(dir)
 	names, err := dir.Readdirnames(-1)
 	check(err)
 	for _, name := range names {
