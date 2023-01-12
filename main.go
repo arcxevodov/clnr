@@ -47,8 +47,8 @@ func main() {
 			color.Red(localString("flagError"))
 			os.Exit(NoFlagsError)
 		case *infoFlag:
-			total, free := getRam()
-			fmt.Printf("%s | %s\n", total, free)
+			total, free, used := getRam()
+			fmt.Printf("%s | %s | %s\n", total, free, used)
 			if noFlags {
 				os.Exit(0)
 			}
@@ -64,7 +64,7 @@ func main() {
 
 // Получение полной и доступной оперативной памяти используя sysconf
 // Getting total and available RAM using sysconf
-func getRam() (string, string) {
+func getRam() (string, string, string) {
 	bTotal := C.sysconf(C._SC_PHYS_PAGES) * C.sysconf(C._SC_PAGE_SIZE)
 	gbTotal := float64(bTotal) / 1024 / 1024 / 1024
 	fmtTotal := fmt.Sprintf(localString("totalRam")+"%.1f GB", gbTotal)
@@ -73,7 +73,9 @@ func getRam() (string, string) {
 	gbFree := float64(bFree) / 1024 / 1024 / 1024
 	fmtFree := fmt.Sprintf(localString("freeRam")+"%.1f GB", gbFree)
 
-	return fmtTotal, fmtFree
+	fmtUsed := fmt.Sprintf(localString("usedRam")+"%.1f GB", gbTotal-gbFree)
+
+	return fmtTotal, fmtFree, fmtUsed
 }
 
 // Инициализация локализатора

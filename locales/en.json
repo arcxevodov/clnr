@@ -6,6 +6,7 @@
     "flagInfo": "Info about RAM",
     "totalRam": "Total: ",
     "freeRam": "Free: ",
+    "usedRam": "Used: ",
     "error": "Error",
     "noRoot": "Not enough privileges. Run the utility as superuser",
     "clearStart": "Clean started",
