@@ -183,10 +183,7 @@ func cleanTemp() {
 	fmt.Print(localString("flagTemp"), "... ")
 	dir, err := os.Open("/tmp")
 	check(err)
-	defer func(dir *os.File) {
-		err := dir.Close()
-		check(err)
-	}(dir)
+	defer dir.Close()
 	names, err := dir.Readdirnames(-1)
 	check(err)
 	for _, name := range names {
