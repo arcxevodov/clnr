@@ -24,7 +24,6 @@ sudo make install
 ```bash
 -r:  Очистка кэша оперативной памяти
 -s:  Перезагрузка Swap
--t:  Очистка временных файлов
 -lang [ru, en]: Локализация
 ```
 
@@ -54,6 +53,5 @@ sudo make install
 ```bash
 -r:  Clean RAM cache
 -s:  Reload Swap
--t:  Clean temporary files
 -lang [ru, en]: Локализация
 ```
