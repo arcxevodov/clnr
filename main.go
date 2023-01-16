@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
-	"path/filepath"
 	"time"
 
 	"github.com/fatih/color"
@@ -23,7 +22,6 @@ var (
 	// Flags for performing various program functions
 	ramFlag  = flag.Bool("r", false, localString("flagRam"))
 	swapFlag = flag.Bool("s", false, localString("flagSwap"))
-	tempFlag = flag.Bool("t", false, localString("flagTemp"))
 	infoFlag = flag.Bool("i", false, localString("flagInfo"))
 
 	// Аргумент для указания языка программы
@@ -40,7 +38,7 @@ const (
 func main() {
 	flag.Parse()
 	if rootCheck() {
-		noFlags := !*ramFlag && !*swapFlag && !*tempFlag
+		noFlags := !*ramFlag && !*swapFlag
 
 		switch {
 		case !*infoFlag && noFlags:
@@ -142,9 +140,6 @@ func doClean() {
 	if *swapFlag {
 		restartSwap()
 	}
-	if *tempFlag {
-		cleanTemp()
-	}
 	displayStatus(localString("clearEnd"))
 }
 
@@ -174,21 +169,5 @@ func cleanRamCache() {
 	check(err)
 	err = os.WriteFile("/proc/sys/vm/drop_caches", []byte("3"), 0)
 	check(err)
-	fmt.Println(localString("success"))
-}
-
-// Очистка папки /tmp путем перебора и рекурсивного удаления всех файлов
-// Clean up the /tmp folder by looping through and recursively deleting all files
-func cleanTemp() {
-	fmt.Print(localString("flagTemp"), "... ")
-	dir, err := os.Open("/tmp")
-	check(err)
-	defer dir.Close()
-	names, err := dir.Readdirnames(-1)
-	check(err)
-	for _, name := range names {
-		err = os.RemoveAll(filepath.Join("/tmp", name))
-		check(err)
-	}
 	fmt.Println(localString("success"))
 }
