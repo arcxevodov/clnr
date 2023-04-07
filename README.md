@@ -1,4 +1,4 @@
-# **clnr**
+# **clnr** (Discontinued)
 
 ## Утилита для очистки Linux <img src="https://media.tenor.com/fP_RQeMnWecAAAAj/penguin-wiping-floor.gif" width="20">
 
