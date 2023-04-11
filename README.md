@@ -1,7 +1,7 @@
 # **clnr** (Discontinued)
 
 ## Утилита для очистки Linux <img src="https://media.tenor.com/fP_RQeMnWecAAAAj/penguin-wiping-floor.gif" width="20">
-
+ 
 Что на данный момент умеет программа:
 
 - <img src="https://media.tenor.com/PBuEkZA9cVwAAAAi/sceptical-trashcan.gif" width="15"> &nbsp; Очищать кэш оперативной памяти
